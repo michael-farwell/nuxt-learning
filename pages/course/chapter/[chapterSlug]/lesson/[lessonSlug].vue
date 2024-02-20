@@ -7,6 +7,17 @@ const course = useCourse();
 const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
 const lesson = computed(() => chapter.value!.lessons.find((lesson) => lesson.slug === $route.params.lessonSlug));
 
+const progress = useState<boolean[][]>("progress", () => []);
+const isLessonComplete = computed(() => {
+  if (!progress.value[chapter.value!.number - 1]) return false;
+  if (!progress.value[chapter.value!.number - 1][lesson.value!.number - 1]) return false;
+  return progress.value[chapter.value!.number - 1][lesson.value!.number - 1];
+});
+const toggleComplete = () => {
+  if (!progress.value[chapter.value!.number - 1]) progress.value[chapter.value!.number - 1] = [];
+  progress.value[chapter.value!.number - 1][lesson.value!.number - 1] = !isLessonComplete.value;
+};
+
 const title = computed((): string => `${ lesson.value?.title } - ${ course.title }`);
 useHead({
   title,
@@ -37,6 +48,9 @@ useHead({
         v-if="lesson.videoId"
         :video-id="lesson.videoId" />
     <p>{{lesson.text}}</p>
+    <LessonCompleteButton
+        :model-value="isLessonComplete"
+        @update:model-value="toggleComplete" />
   </div>
 </template>
 
