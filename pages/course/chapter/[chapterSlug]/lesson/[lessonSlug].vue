@@ -28,6 +28,9 @@ const lesson = computed(() => chapter.value!.lessons.find((lesson) => lesson.slu
         Download Video
       </a>
     </div>
+    <VideoPlayer
+        v-if="lesson.videoId"
+        :video-id="lesson.videoId" />
     <p>{{lesson.text}}</p>
   </div>
 </template>
