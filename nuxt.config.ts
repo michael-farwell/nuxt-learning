@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     port: 5173,
   },
   devtools: { enabled: true },
+  modules: ["@vueuse/nuxt"],
   postcss: {
     plugins: {
       tailwindcss: {},

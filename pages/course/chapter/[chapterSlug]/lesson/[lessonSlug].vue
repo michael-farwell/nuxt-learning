@@ -7,7 +7,7 @@ const course = useCourse();
 const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
 const lesson = computed(() => chapter.value!.lessons.find((lesson) => lesson.slug === $route.params.lessonSlug));
 
-const progress = useState<boolean[][]>("progress", () => []);
+const progress = useLocalStorage<boolean[][]>("progress", []);
 const isLessonComplete = computed(() => {
   if (!progress.value[chapter.value!.number - 1]) return false;
   if (!progress.value[chapter.value!.number - 1][lesson.value!.number - 1]) return false;
