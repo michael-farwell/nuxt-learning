@@ -6,6 +6,11 @@ const course = useCourse();
 
 const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
 const lesson = computed(() => chapter.value!.lessons.find((lesson) => lesson.slug === $route.params.lessonSlug));
+
+const title = computed((): string => `${ lesson.value?.title } - ${ course.title }`);
+useHead({
+  title,
+});
 </script>
 
 <template>
