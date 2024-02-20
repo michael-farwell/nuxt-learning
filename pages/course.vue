@@ -2,6 +2,7 @@
     setup
     lang="ts">
 const { chapters } = useCourse();
+const $route = useRoute();
 </script>
 
 <template>
@@ -27,8 +28,9 @@ const { chapters } = useCourse();
               v-for="(lesson, index) in chapter.lessons"
               :key="lesson.slug"
               class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
-              :to="`/course/chapter/${chapter.slug}/lesson/${lesson.slug}`">
-            <span class="text-gray-500">{{ index + 1 }}.</span>
+              :class="lesson.path === $route.fullPath ? 'text-blue-500 font-semibold' : ''"
+              :to="lesson.path">
+            <span class="text-gray-500">{{index + 1}}.</span>
             <span>{{lesson.title}}</span>
           </NuxtLink>
         </div>
