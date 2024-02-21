@@ -14,6 +14,7 @@ const isLessonComplete = computed(() => {
   return progress.value[chapter.value!.number - 1][lesson.value!.number - 1];
 });
 const toggleComplete = () => {
+  throw createError("Could not update.");
   if (!progress.value[chapter.value!.number - 1]) progress.value[chapter.value!.number - 1] = [];
   progress.value[chapter.value!.number - 1][lesson.value!.number - 1] = !isLessonComplete.value;
 };
