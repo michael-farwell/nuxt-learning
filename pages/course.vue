@@ -4,7 +4,8 @@
 const { chapters } = useCourse();
 const $route = useRoute();
 
-const resetError = (error: any) => {
+const resetError = async (error: any) => {
+  await navigateTo("/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3");
   error.value = null;
 };
 </script>
@@ -44,7 +45,7 @@ const resetError = (error: any) => {
         <NuxtPage />
         <template #error="{error}">
           <p>
-            Oh no, something with the lesson!
+            Oh no, something went wrong with the lesson!
             <code>{{error}}</code>
           </p>
           <p>
