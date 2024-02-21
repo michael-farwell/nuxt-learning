@@ -1,19 +1,7 @@
 import courseData from "~/composables/courseData";
 
-interface Course {
-  title: string;
-  chapters: Chapter[];
-}
-
-interface Chapter {
-  title: string;
-  slug: string;
-  number: number;
-  lessons: Lesson[];
-}
-
-interface Lesson {
-  downloadUrl?: string;
+type Lesson = {
+  downloadUrl: string;
   number: number;
   path: string;
   slug: string;
@@ -21,6 +9,18 @@ interface Lesson {
   text: string;
   title: string;
   videoId: number;
+}
+
+type Chapter = {
+  lessons: Lesson[];
+  number: number;
+  slug: string;
+  title: string;
+}
+
+type Course = {
+  chapters: Chapter[];
+  title: string;
 }
 
 export const useCourse = (): Course => {
