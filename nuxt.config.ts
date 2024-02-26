@@ -5,7 +5,10 @@ export default defineNuxtConfig({
     port: 5173,
   },
   devtools: { enabled: true },
-  modules: ["@vueuse/nuxt"],
+  modules: [
+    "@vueuse/nuxt",
+    "@nuxtjs/supabase",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
