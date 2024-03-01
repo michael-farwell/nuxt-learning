@@ -1,4 +1,8 @@
+import { useSupabaseUser } from "#imports";
+
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (to.params.chapterSlug === "1-chapter-1") return;
-  return navigateTo("/login");
+  const user = useSupabaseUser();
+
+  if (user.value || to.params.chapterSlug === "1-chapter-1") return;
+  return navigateTo(`/login?redirectTo=${ to.path }`);
 });
