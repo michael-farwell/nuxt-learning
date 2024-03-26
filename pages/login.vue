@@ -34,7 +34,3 @@ const login = async () => {
     </button>
   </div>
 </template>
-
-<style scoped>
-
-</style>

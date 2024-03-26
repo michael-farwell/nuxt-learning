@@ -1,8 +1,12 @@
 <script
     setup
     lang="ts">
+import useLesson from "~/composables/useLesson";
+
 const $route = useRoute();
 const course = useCourse();
+const { chapterSlug, lessonSlug } = $route.params as { chapterSlug: string, lessonSlug: string };
+const lesson = await useLesson(chapterSlug, lessonSlug);
 
 definePageMeta({
   middleware: [
@@ -32,20 +36,19 @@ definePageMeta({
 });
 
 const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
-const lesson = computed(() => chapter.value!.lessons.find((lesson) => lesson.slug === $route.params.lessonSlug));
 
 const progress = useLocalStorage<boolean[][]>("progress", []);
 const isLessonComplete = computed(() => {
   if (!progress.value[chapter.value!.number - 1]) return false;
-  if (!progress.value[chapter.value!.number - 1][lesson.value!.number - 1]) return false;
-  return progress.value[chapter.value!.number - 1][lesson.value!.number - 1];
+  if (!progress.value[chapter.value!.number - 1][lesson.number - 1]) return false;
+  return progress.value[chapter.value!.number - 1][lesson.number - 1];
 });
 const toggleComplete = () => {
   if (!progress.value[chapter.value!.number - 1]) progress.value[chapter.value!.number - 1] = [];
-  progress.value[chapter.value!.number - 1][lesson.value!.number - 1] = !isLessonComplete.value;
+  progress.value[chapter.value!.number - 1][lesson.number - 1] = !isLessonComplete.value;
 };
 
-const title = computed((): string => `${ lesson.value?.title } - ${ course.title }`);
+const title = computed((): string => `${ lesson.title } - ${ course.title }`);
 useHead({
   title,
 });
@@ -80,7 +83,3 @@ useHead({
         @update:model-value="toggleComplete" />
   </div>
 </template>
-
-<style scoped>
-
-</style>

@@ -63,7 +63,3 @@ const resetError = async (error: any) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

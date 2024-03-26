@@ -15,7 +15,3 @@ watch(user, () => {
 <template>
   <div>Waiting for login...</div>
 </template>
-
-<style scoped>
-
-</style>
