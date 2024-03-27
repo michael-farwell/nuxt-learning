@@ -1,6 +1,6 @@
 import type { LessonWithPath } from "~/types/course";
 
-export default (): LessonWithPath => {
-  const { chapters } = useCourse();
+export default async (): Promise<LessonWithPath> => {
+  const { chapters } = await useCourse();
   return chapters[0].lessons[0] as LessonWithPath;
 }

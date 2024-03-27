@@ -23,3 +23,22 @@ export type Course = {
   chapters: Chapter[];
   title: string;
 }
+
+export type CourseMeta = {
+  chapters: OutlineChapter[];
+  title: string
+}
+
+export type OutlineBase = {
+  number: number;
+  slug: string;
+  title: string;
+}
+
+export type OutlineChapter = OutlineBase & {
+  lessons: OutlineLesson[];
+}
+
+export type OutlineLesson = OutlineBase & {
+  path: string;
+}

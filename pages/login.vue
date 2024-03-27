@@ -1,7 +1,7 @@
 <script
     setup
     lang="ts">
-const { title } = useCourse();
+const { title } = await useCourse();
 const { query } = useRoute();
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();

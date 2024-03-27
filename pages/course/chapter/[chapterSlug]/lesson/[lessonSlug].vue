@@ -4,14 +4,14 @@
 import useLesson from "~/composables/useLesson";
 
 const $route = useRoute();
-const course = useCourse();
+const course = await useCourse();
 const { chapterSlug, lessonSlug } = $route.params as { chapterSlug: string, lessonSlug: string };
 const lesson = await useLesson(chapterSlug, lessonSlug);
 
 definePageMeta({
   middleware: [
-    function({ params }, from) {
-      const course = useCourse();
+    async function({ params }, from) {
+      const course = await useCourse();
       const chapter = course.chapters.find((chapter) => chapter.slug === params.chapterSlug);
       if (!chapter) {
         return abortNavigation(

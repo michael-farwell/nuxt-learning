@@ -1,7 +1,7 @@
 <script
     setup
     lang="ts">
-const { path } = useFirstLesson();
+const { path } = await useFirstLesson();
 </script>
 
 <template>

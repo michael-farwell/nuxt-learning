@@ -1,11 +1,11 @@
 <script
     setup
     lang="ts">
-const { title, chapters } = useCourse();
-const $route = useRoute();
+const { title, chapters } = await useCourse();
+const firstLesson = await useFirstLesson();
 
 const resetError = async (error: any) => {
-  await navigateTo("/course/chapter/1-chapter-1/lesson/1-introduction-to-typescript-with-vue-js-3");
+  await navigateTo(firstLesson.path);
   error.value = null;
 };
 </script>
