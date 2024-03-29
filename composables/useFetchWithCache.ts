@@ -5,7 +5,9 @@ import type { FetchError } from "ofetch";
 export default async <T> (url: string): Promise<T> => {
   const cached = useSessionStorage<T>(url, null, { serializer: StorageSerializers.object });
   if (!cached.value) {
-    const { data, error } = await useFetch(url) as AsyncData<T, FetchError>;
+    const { data, error } = await useFetch(url, {
+      headers: useRequestHeaders(["cookie"]),
+    }) as AsyncData<T, FetchError>;
     if (error.value) {
       throw createError({
         ...error.value,
