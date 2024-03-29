@@ -1,4 +1,4 @@
 import useFetchWithCache from "~/composables/useFetchWithCache";
-import type { CourseMeta } from "~/types/course";
+import type { CourseOutline } from "~/server/api/course/meta.get";
 
-export default async () => useFetchWithCache<CourseMeta>("/api/course/meta")
+export default async () => useFetchWithCache<CourseOutline>("/api/course/meta")
