@@ -41,6 +41,20 @@ model Lesson {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Chapter   Chapter @relation(fields: [chapterId], references: [id])
-  chapterId Int
+  Chapter        Chapter          @relation(fields: [chapterId], references: [id])
+  chapterId      Int
+  LessonProgress LessonProgress[]
+}
+
+model LessonProgress {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  completed Boolean  @default(false)
+  userEmail String
+
+  Lesson   Lesson @relation(fields: [lessonId], references: [id])
+  lessonId Int
+
+  @@unique([lessonId, userEmail])
 }
