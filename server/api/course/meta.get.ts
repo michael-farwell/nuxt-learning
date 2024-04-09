@@ -9,7 +9,7 @@ const lessonSelect = Prisma.validator<Prisma.LessonDefaultArgs>()({
     number: true,
   },
 });
-export type LessonOutline = Prisma.LessonGetPayload<typeof lessonSelect>
+export type LessonOutline = Prisma.LessonGetPayload<typeof lessonSelect> & { path: string }
 
 const chapterSelect = Prisma.validator<Prisma.ChapterDefaultArgs>()({
   select: {
@@ -19,7 +19,9 @@ const chapterSelect = Prisma.validator<Prisma.ChapterDefaultArgs>()({
     lessons: lessonSelect,
   },
 });
-export type ChapterOutline = Prisma.ChapterGetPayload<typeof chapterSelect>
+export type ChapterOutline = Omit<Prisma.ChapterGetPayload<typeof chapterSelect>, "lessons"> & {
+  lessons: LessonOutline[]
+}
 
 const courseSelect = Prisma.validator<Prisma.CourseDefaultArgs>()({
   select: {
@@ -27,6 +29,27 @@ const courseSelect = Prisma.validator<Prisma.CourseDefaultArgs>()({
     chapters: chapterSelect,
   },
 });
-export type CourseOutline = Prisma.CourseGetPayload<typeof courseSelect>
+export type CourseOutline = Omit<Prisma.CourseGetPayload<typeof courseSelect>, "chapters"> & {
+  chapters: ChapterOutline[]
+}
 
-export default defineEventHandler(() => prisma.course.findFirst(courseSelect));
+export default defineEventHandler(async (): Promise<CourseOutline> => {
+  const outline = await prisma.course.findFirst(courseSelect);
+  if (!outline) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Course not found",
+    });
+  }
+  const chapters = outline.chapters.map((chapter) => ({
+    ...chapter,
+    lessons: chapter.lessons.map((lesson) => ({
+      ...lesson,
+      path: `/course/chapter/${ chapter.slug }/lesson/${ lesson.slug }`,
+    })),
+  }));
+  return {
+    ...outline,
+    chapters,
+  };
+});

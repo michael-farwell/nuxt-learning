@@ -5,6 +5,7 @@ import useLesson from "~/composables/useLesson";
 
 const $route = useRoute();
 const course = await useCourse();
+const user = useSupabaseUser();
 const { chapterSlug, lessonSlug } = $route.params as { chapterSlug: string, lessonSlug: string };
 const lesson = await useLesson(chapterSlug, lessonSlug);
 const store = useCourseProgress();
