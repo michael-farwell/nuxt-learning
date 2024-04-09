@@ -10,6 +10,11 @@ export default defineNuxtConfig({
     "@nuxtjs/supabase",
     "@pinia/nuxt",
   ],
+  nitro: {
+    prerender: {
+      routes: ["/landing"],
+    },
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
