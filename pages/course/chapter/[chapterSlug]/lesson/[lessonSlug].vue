@@ -7,6 +7,10 @@ const $route = useRoute();
 const course = await useCourse();
 const { chapterSlug, lessonSlug } = $route.params as { chapterSlug: string, lessonSlug: string };
 const lesson = await useLesson(chapterSlug, lessonSlug);
+const store = useCourseProgress();
+const { initialize, toggleComplete } = store;
+
+initialize();
 
 definePageMeta({
   middleware: [
@@ -35,18 +39,10 @@ definePageMeta({
   ],
 });
 
-const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
-
-const progress = useLocalStorage<boolean[][]>("progress", []);
-const isLessonComplete = computed(() => {
-  if (!progress.value[chapter.value!.number - 1]) return false;
-  if (!progress.value[chapter.value!.number - 1][lesson.number - 1]) return false;
-  return progress.value[chapter.value!.number - 1][lesson.number - 1];
+const isCompleted = computed(() => {
+  return store.progress?.[chapterSlug]?.[lessonSlug] || 0;
 });
-const toggleComplete = () => {
-  if (!progress.value[chapter.value!.number - 1]) progress.value[chapter.value!.number - 1] = [];
-  progress.value[chapter.value!.number - 1][lesson.number - 1] = !isLessonComplete.value;
-};
+const chapter = computed(() => course.chapters.find((chapter) => chapter.slug === $route.params.chapterSlug));
 
 const title = computed((): string => `${ lesson.title } - ${ course.title }`);
 useHead({
@@ -57,7 +53,7 @@ useHead({
 <template>
   <div>
     <p class="mt-0 uppercase font-bold text-slate-400 mb-1">
-      Lesson {{chapter.number}} - {{lesson.number}}
+      Lesson {{chapter!.number}} - {{lesson.number}}
     </p>
     <h2 class="my-0">{{lesson.title}}</h2>
     <div class="flex space-x-4 mt-2 mb-8">
@@ -79,7 +75,8 @@ useHead({
         :video-id="lesson.videoId" />
     <p>{{lesson.text}}</p>
     <LessonCompleteButton
-        :model-value="isLessonComplete"
+        v-if="user"
+        :model-value="isCompleted"
         @update:model-value="toggleComplete" />
   </div>
 </template>
