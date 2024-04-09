@@ -1,8 +1,6 @@
 <script
     setup
     lang="ts">
-import useLesson from "~/composables/useLesson";
-
 const $route = useRoute();
 const course = await useCourse();
 const user = useSupabaseUser();
@@ -78,6 +76,6 @@ useHead({
     <LessonCompleteButton
         v-if="user"
         :model-value="isCompleted"
-        @update:model-value="toggleComplete" />
+        @update:model-value="toggleComplete(chapterSlug, lessonSlug)" />
   </div>
 </template>

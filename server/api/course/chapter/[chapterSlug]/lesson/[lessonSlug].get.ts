@@ -1,3 +1,5 @@
+// noinspection Annotator
+
 import { PrismaClient } from "@prisma/client";
 import protectRoute from "~/server/utils/protectRoute";
 
