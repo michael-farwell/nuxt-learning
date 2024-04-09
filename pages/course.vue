@@ -1,8 +1,10 @@
 <script
     setup
     lang="ts">
+const user = useSupabaseUser();
 const { title, chapters } = await useCourse();
 const firstLesson = await useFirstLesson();
+const { percentageCompleted } = storeToRefs(useCourseProgress());
 
 const resetError = async (error: any) => {
   await navigateTo(firstLesson.path);
@@ -27,9 +29,16 @@ const resetError = async (error: any) => {
         <h3>Chapters</h3>
         <div
             class="space-y-1 mb-4 flex flex-col"
-            v-for="chapter in chapters"
+            v-for="(chapter, index) in chapters"
             :key="chapter.slug">
-          <h4>{{chapter.title}}</h4>
+          <h4 class="flex justify-between items-center">
+            {{chapter.title}}
+            <span
+                v-if="percentageCompleted && user"
+                class="text-emerald-500 text-sm">
+              {{percentageCompleted.chapters[index]}}%
+            </span>
+          </h4>
           <NuxtLink
               v-for="(lesson, index) in chapter.lessons"
               :key="lesson.slug"
@@ -39,6 +48,11 @@ const resetError = async (error: any) => {
             <span class="text-gray-500">{{index + 1}}.</span>
             <span>{{lesson.title}}</span>
           </NuxtLink>
+        </div>
+        <div
+            v-if="percentageCompleted"
+            class="mt-8 text-sm font-medium text-gray-500 flex justify-between items-center">
+          Course completion: <span>{{percentageCompleted.course}}%</span>
         </div>
       </div>
 
