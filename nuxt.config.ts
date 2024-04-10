@@ -23,6 +23,12 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  runtimeConfig: {
+    stripeSecret: "",
+    public: {
+      stripeKey: "",
+    },
+  },
   supabase: {
     redirect: false,
   },
