@@ -89,15 +89,15 @@ const showPayment = ref(false);
             <Badge color="bg-blue-400">
               {{lesson.number}}
             </Badge>
-            <span class="text-xl opacity-80">{{
-                lesson.title
-                                             }}</span>
+            <span class="text-xl opacity-80">
+              {{lesson.title}}
+            </span>
           </li>
         </ul>
       </li>
     </ul>
   </Section>
-  <Payment
+  <LazyPayment
       v-if="showPayment"
       @close="showPayment = false"
   />
