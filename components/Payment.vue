@@ -7,6 +7,7 @@ const email = ref("");
 const stripe = ref(null);
 const processingPayment = ref(false);
 const success = ref(false);
+const paymentIntentId = ref(null);
 
 const formStyle = {
   base: {
@@ -34,13 +35,12 @@ const handleSubmit = async () => {
   processingPayment.value = true;
   let secret;
   try {
-    const response = await $fetch("/api/stripe/paymentIntent", {
+    secret = await $fetch("/api/stripe/paymentIntent", {
       method: "POST",
       body: {
         email: email.value,
       },
     });
-    secret = response;
   } catch (e) {
     console.log(e);
   }
@@ -52,12 +52,21 @@ const handleSubmit = async () => {
           receipt_email: email.value,
         },
     );
-    if (response.paymentIntent.status === "succeeded") success.value = true;
+    if (response.paymentIntent.status === "succeeded") {
+      success.value = true;
+      paymentIntentId.value = response.paymentIntent.id;
+    }
   } catch (e) {
     console.log(e);
   } finally {
     processingPayment.value = false;
   }
+};
+
+const login = async () => {
+  if (!paymentIntentId.value) return;
+  const redirectTo = `/linkWithPurchase/${ paymentIntentId.value }`;
+  await navigateTo(`/login?redirectTo=${ redirectTo }`);
 };
 
 useHead({
@@ -81,7 +90,9 @@ useHead({
         <h2 class="text-xl font-bold">
           Thanks for buying the course!
         </h2>
-        <button class="mt-4 w-full text-md text-black h-12 px-16 rounded focus:outline-none focus:shadow-outline flex items-center justify-center transition bg-blue-300 hover:bg-blue-200">
+        <button
+            @click="login"
+            class="mt-4 w-full text-md text-black h-12 px-16 rounded focus:outline-none focus:shadow-outline flex items-center justify-center transition bg-blue-300 hover:bg-blue-200">
           Login with Github to access
         </button>
       </div>
